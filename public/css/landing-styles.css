@@ -1,0 +1,86 @@
+#heading-container-divider {
+    display: grid;
+    grid-template-columns: 50% 50%;
+
+    padding-left: 10%;
+    padding-right: 10%;
+
+    padding-top: 2%;
+    padding-bottom: 2%;
+
+    background-color: #AFA2FF;
+    border-bottom: 1px solid black;
+}
+
+#sign-up-form {
+    display: grid;
+    grid-template-columns: 100%;
+}
+
+#sign-up-form > * {
+    margin-top: 2%;
+}
+
+#sign-up-form > input {
+    padding: 1%;
+}
+
+#sign-up-form input[type="submit"] {
+    width: 50%;
+
+    cursor: pointer;
+}
+
+#heading-content-container {
+    font-size: 1.5em;
+    line-height: 2em;
+
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+#heading-content-container > div > h1 {
+    font-size: 2em;
+    line-height: 1.5em;
+
+    font-family: 'Roboto-Mono', monospace;
+}
+
+#body-container {
+    padding: 2%;
+
+    font-family: 'Roboto-Mono', monospace;
+}
+
+#body-guide-container > h1 {
+    font-size: 3em;
+    text-align: center;
+}
+
+#body-guide-container-divider {
+    display: grid;
+    grid-template-columns: 50% 50%;
+
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+#body-guide-container-divider > div > h1 {
+    text-align: center;   
+}
+
+.gallary {
+    display: flex;
+    flex-direction: row;
+}
+
+.labeled-graphic {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.labeled-graphic > img {
+    max-width:100%;
+    max-height:100%;
+}

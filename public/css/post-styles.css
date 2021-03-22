@@ -1,0 +1,81 @@
+/* Tabs */
+.tablink {
+    background-color: #555;
+    color: white;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    font-size: 17px;
+    width: 33%;
+}
+
+.tablink:hover {
+    background-color: #777;
+}
+
+/* Style the tab content (and add height:100% for full page content) */
+.tabcontent {
+    display: none;
+    padding: 2%;
+    height: 100%;
+}
+
+/* Page Content */
+#post-control-elements {
+    padding: 2%;
+}
+
+#post-tabs-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(33%, 1fr));
+}
+
+#post-tabs-container > button {
+    width: 100%;
+}
+
+#post-page-preview {
+    min-height: 100vh;
+
+    border-top: 1px solid black;
+}
+
+.tabcontent input[type="text"] {
+    padding: 1%;
+
+    margin-top: 0.5%;
+    margin-bottom: 0.5%;
+
+    width: 20%;
+}
+
+.tabcontent select {
+    margin-top: 0.5%;
+    margin-bottom: 0.5%;
+
+    width: 10%;
+}
+
+.tabcontent input[type="color"] {
+    margin-top: 0.5%;
+    margin-bottom: 0.5%;
+
+    width: 10%;
+}
+
+.tabcontent button {
+    margin-top: 0.5%;
+    margin-bottom: 0.5%;
+
+    width: 10%;
+}
+
+.tabcontent {
+    font-family: 'Roboto-Mono', monospace;
+}
+
+.tabcontent > h4 {
+    font-size: 2em;
+}

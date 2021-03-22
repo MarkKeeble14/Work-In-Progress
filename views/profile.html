@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name ="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Work-In-Progress | Profile</title>
+
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/profile-styles.css">
+    <link rel="stylesheet" href="./css/index-styles.css">
+    <link rel="stylesheet" href="./css/footer.css">
+    <link rel="stylesheet" href="./css/header.css">
+</head>
+
+<body>
+    <div class="page-container">
+        <header>
+            <div id="brand-container">
+                <a href="./landing.html"><img src="http://cdn4.iconfinder.com/data/icons/socialmediaicons_v120/48/google.png" alt="Logo"></a>
+                <h3>Work in Progress</h3>
+            </div>
+            <div id="header-menu">
+                <ul>
+                    <li><a href="/landing.html">Home</a></li>
+                    <li><a href="/index.html">Browse</a></li>
+                    <li><a href="/profile.html">Profile</a></li>
+                    <li><a href="/post.html">Post</a></li>
+                </ul>
+            </div>
+        </header>
+        <div id="content">
+            <div id="profile-info-container">
+                <h1>Profile</h1>
+                <div id="profile-persona-container">
+                    <div>
+                        <h1>Picture</h1>
+                        <img id="profile-picture" src="./images/unity_logo.png" alt="">
+                        <button>Change</button>
+                    </div>
+                    <div id="profile-details">
+                        <h1>Info</h1>
+                        <div id="profile-registered-date">
+                            <p>Registered on </p><p>Apr 16, 2020</p>
+                        </div>
+                        <input id="profile-display-name" type="text" readonly placeholder="Display Name">
+                        <input id="profile-website" type="text" readonly placeholder="Website">
+                        <input id="profile-URL" type="text" readonly placeholder="URL">
+                        <div id="profile-contact" class="one-column-grid">
+                            <input id="profile-email" type="text" readonly placeholder="Email">
+                            <input id="profile-phone" type="text" readonly placeholder="Phone #">
+                        </div>
+                        <div id="profile-types" class="checkbox-list-container">
+                            <h4>Skills</h4>
+                            <ul id="profile-types-selectors" class="checkbox-list">
+                                <li class="profile-types-select checkbox-item">
+                                  <input class="profile-types-checkbox" name="profile-types-programmer" type="checkbox"/>
+                                  <label class="profile-types-label" for="profile-types-programmer">Programming</label>
+                                </li>
+                                <li class="profile-types-select checkbox-item">
+                                    <input class="profile-types-checkbox" name="profile-types-artist" type="checkbox"/>
+                                    <label class="profile-types-label" for="profile-types-artist">Artist</label>
+                                </li>
+                                <li class="profile-types-select checkbox-item">
+                                    <input class="profile-types-checkbox" name="profile-types-audio-engineer" type="checkbox"/>
+                                    <label class="profile-types-label" for="profile-types-audio-engineer">Audio Engineer</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="profile-comments">
+                        <h1>Public Comments</h1>
+                        <h4>Coming Soon!</h4>
+                    </div>
+                </div>
+            </div>
+            <div id="profile-projects-container">
+                <h1>Projects</h1>
+                <div id="item-display">
+                    <!-- This is an example of the project container -->
+                    <div class="proj-container proj-inactive">
+                        <div class="proj-details">
+                            <div class="proj-bg proj-bg-fader"></div>
+                            <div class="proj-bg"></div>
+                            <div class="proj-info">
+                                <h3 class="proj-title">Dark Twisted Fantasy</h3>
+                                <div class="proj-tags-container">
+                                    <div class="proj-tags-list">
+                                        <p>Pixel Art</p>
+                                        <p>2D</p>
+                                        <p>Top Down</p>
+                                    </div>
+                                    <div class="proj-tags-list">
+                                        <p>Rogue-Like</p>
+                                        <p>FPS</p>
+                                        <p>Dungeon-Crawler</p>
+                                    </div>
+                                </div>
+                                <a class="proj-share" href="./index.html">Share</a>
+                                <img class="proj-target-platform-img" src="./images/unity_logo.png" alt="Target platform">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="proj-container proj-active">
+                        <div class="proj-details">
+                            <div class="proj-bg proj-bg-fader"></div>
+                            <div class="proj-bg"></div>
+                            <div class="proj-info">
+                                <h3 class="proj-title">Dark Twisted Fantasy</h3>
+                                <div class="proj-tags-container">
+                                    <div class="proj-tags-list">
+                                        <p>Pixel Art</p>
+                                        <p>2D</p>
+                                        <p>Top Down</p>
+                                    </div>
+                                    <div class="proj-tags-list">
+                                        <p>Rogue-Like</p>
+                                        <p>FPS</p>
+                                        <p>Dungeon-Crawler</p>
+                                    </div>
+                                </div>
+                                <a class="proj-share" href="./index.html">Share</a>
+                                <img class="proj-target-platform-img" src="./images/unity_logo.png" alt="Target platform">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div id="footer-content">
+                <div id="footer-CTA">
+                    <h2>Explore</h2>
+                    <ul>
+                       <a href=""><li>Signup</li></a>
+                       <a href=""><li>Signin</li></a>
+                       <a href=""><li>Profile</li></a>
+                    </ul>
+                </div>
+                <div id="footer-main">
+                    <h2>Overfiew</h2>
+                    <ul>
+                        <a href=""><li>About</li></a>
+                        <a href=""><li>Contact</li></a>
+                    </ul>
+                </div>
+                <div id="footer-site-info">
+                    <h2>Explore</h2>
+                    <ul>
+                       <a href=""><li>Terms of Use</li></a>
+                       <a href=""><li>Privacy Policy</li></a>
+                    </ul>
+                </div>
+            </div>
+            <p id="footer-copyright">© 2021 <a href="">Mark Keeble</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>
