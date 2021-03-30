@@ -58,14 +58,14 @@ router.get('/post', function(req,res){
 // 3 POST
 
 // Create Account (landing)
-router.post(endPointRoot + '/landing', (req, res) => {
+router.post(endPointRoot + '/signup', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     res.send(email);
 });
 
 // Create Project (post)
-router.post(endPointRoot + '/post', (req, res) => {
+router.post(endPointRoot + '/projects/create', (req, res) => {
     const title = req.body.title;
     const description = req.body.description;
     const tagList = req.body.tagList;
