@@ -79,3 +79,9 @@
 .tabcontent > h4 {
     font-size: 2em;
 }
+
+.one-column-grid > textarea {
+    padding: 2em;
+    margin-top: 0.5%;
+    margin-bottom: 0.5%;
+}
