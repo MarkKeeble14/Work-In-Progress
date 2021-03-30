@@ -31,8 +31,8 @@ app.use(function (req, res, next) {
 const db = mysql.createConnection({
     host: "localhost",
     user: "markkeeb_nodemysql",
-    password: "wipwop123",
-    database: "wip"
+    password: "nodemysql123",
+    database: "work-in-progress"
 });
 
 app.use(express.static(__dirname + '/public'));
@@ -76,7 +76,6 @@ router.post(endPointRoot + '/projects/create', (req, res) => {
 router.post(endPointRoot + '/profile/:id', (req, res) => {
     const id = req.params.id;
     const user = req.body.user;
-    const target = req.body.target;
     const contents = req.body.contents;
     res.send(id);
 });
@@ -97,7 +96,18 @@ router.delete(endPointRoot + '/profile/:id/:projectId', (req, res) => {
     })
 });
 
-// NEED ANOTHER DELETE
+// Delete Account
+router.delete(endPointRoot + '/profile/:id', (req, res) => {
+    const id = req.params.id;
+
+    db.query('...', (err, result) => {
+        if (err) {
+            throw err;
+        } else {
+            res.send(result);
+        }
+    })
+});
 
 // 2 PUT
 
@@ -161,6 +171,19 @@ router.get(endPointRoot + '/projects/fetch', (req,res) => {
 
 // Get Account Information & Projects (profile)
 router.get(endPointRoot + '/profile/:id', (req,res) => {
+    const id = req.params.id;
+    db.query('...', (err, result) => {
+        if (err) {
+            console.log(err);
+            res.send(err);
+        } else {
+            res.status(200).send(result);
+        }
+    })
+});
+
+// GET admin stuff
+router.get(endPointRoot + '/admin', (req,res) => {
     const id = req.params.id;
     db.query('...', (err, result) => {
         if (err) {
