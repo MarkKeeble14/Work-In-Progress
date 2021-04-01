@@ -1,0 +1,38 @@
+CREATE TABLE Users (
+	id INT NOT NULL AUTO_INCREMENT,
+	email VARCHAR(255),
+	display_name VARCHAR(255),
+	personal_website_url VARCHAR(255),
+	account_type VARCHAR(255) DEFAULT 'user',
+	created_at TIMESTAMP DEFAULT CURRENT_DATE,
+	profile_picture VARCHAR(255),
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE Projects (
+	id INT NOT NULL AUTO_INCREMENT,
+	owner_id INT,
+	title VARCHAR(255),
+	description VARCHAR(255),
+	tag_list VARCHAR(255),
+	PRIMARY KEY (id),
+	CONSTRAINT FK_ProjectOwner FOREIGN KEY (owner_id) REFERENCES Users(id)
+);
+
+CREATE TABLE Profile_Comments (
+	id INT NOT NULL AUTO_INCREMENT,
+	user_made_comment_id INT,
+	user_recieved_comment_id INT,
+	comment_content VARCHAR(255),
+	PRIMARY KEY (id),
+	CONSTRAINT FK_MadeCommentUser FOREIGN KEY (user_made_comment_id) REFERENCES Users(id),
+	CONSTRAINT FK_RecievedCommentUser FOREIGN KEY (user_recieved_comment_id) REFERENCES Users(id)
+);
+
+CREATE TABLE Endpoints (
+	id INT NOT NULL AUTO_INCREMENT,
+	method VARCHAR(255),
+	endpoint VARCHAR(255),
+	uses INT NOT NULL DEFAULT 0,
+	PRIMARY KEY (id)
+);

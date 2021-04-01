@@ -1,0 +1,48 @@
+footer {
+    height: fit-content;
+    width: 100%;
+
+    font-family: 'Roboto Mono', monospace;
+    text-align: left;
+
+    background-color: #AFA2FF;
+    border: 1px solid black;
+}
+
+footer h2 {
+    font-size: 2em;
+    text-decoration: underline;
+}
+
+footer ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 100%;
+
+    font-size: 12px;
+
+    line-height: 2em;
+}
+
+#footer-content {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+#footer-content > div {
+    padding-left: 2%;
+    padding-right: 2%;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+#footer-CTA li {
+}
+
+#footer-copyright {
+    text-align: center;
+}

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="UTF-8"/>
+
+    <title>Work-In-Progress | Welcome</title>
+
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/landing-styles.css">
+    <link rel="stylesheet" href="./css/footer.css">
+    <link rel="stylesheet" href="./css/header.css">
+</head>
+
+<body>
+    <!-- Background of this is an image -->
+    <div class="page-container">
+        <header>
+            <div id="brand-container">
+                <a href="/"><img src="http://cdn4.iconfinder.com/data/icons/socialmediaicons_v120/48/google.png" alt="Logo"></a>
+                <h3>Work in Progress</h3>
+            </div>
+            <div id="header-menu">
+                <ul>
+                    <li><a href="./landing.html">Home</a></li>
+                    <li><a href="./index.html">Browse</a></li>
+                    <li><a href="./profile.html">Profile</a></li>
+                    <li><a href="./post.html">Post</a></li>
+                </ul>
+            </div>
+        </header>
+        <div id="content">
+            <div id="heading-container-divider">
+                <div id="heading-content-container">
+                    <div class="one-column-grid">
+                        <h1>Connect</h1>
+                        <h1>Collaborate</h1>
+                        <h1>Create</h1>
+                    </div>
+                    <h4>Work-In-Progress exists to connect people of different talents together. Some may struggle with art, others may not have
+                        the slightest inking of how to code. Connect these two individuals together, and they can do wonderful things.
+                    </h4>
+                </div>
+                <div id="sign-up-form-container">
+                    <h1>Join Up</h1>
+                    <form id="sign-up-form">
+                        <input type="text" placeholder="Email" id="sign-up-form-email">
+                        <input type="text" placeholder="Display Name" id="sign-up-form-display-name">
+                        <input type="password" placeholder="Password" id="sign-up-form-password">
+                        <!--
+                        <div>
+                            <input type="checkbox" name="show-pass">
+                            <label for="show-pass">Show Password</label>
+                        </div> 
+                        -->
+                        <input type="button" onclick="processSignup()" value="Signup">
+                    </form>
+                    <p>By clicking ‘Submit’, I hereby acknowledge and agree that I have read and understood Work-In-Progress Privacy Policy.</p>
+                </div>
+            </div>
+            <div id="body-container">
+                <div id="body-guide-container">
+                    <h1>How It Works</h1>
+                    <div id="body-guide-container-divider">
+                        <div id="body-guide-find">
+                            <h1>Find a Project To Contribute to</h1>
+                            <div class="gallary">
+                                <div class="labeled-graphic">
+                                    <img src="./images/unity_logo.png" alt="">
+                                    <p>Here is an explenation</p>
+                                </div>
+                                <div class="labeled-graphic">
+                                    <img src="./images/unity_logo.png" alt="">
+                                    <p>Here is an explenation</p>
+                                </div>
+                                <div class="labeled-graphic">
+                                    <img src="./images/unity_logo.png" alt="">
+                                    <p>Here is an explenation</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="body-guide-create">
+                            <h1>Create a Project for Others to Find</h1>
+                            <div class="gallary">
+                                <div class="labeled-graphic">
+                                    <img src="./images/unity_logo.png" alt="">
+                                    <p>Here is an explenation</p>
+                                </div>
+                                <div class="labeled-graphic">
+                                    <img src="./images/unity_logo.png" alt="">
+                                    <p>Here is an explenation</p>
+                                </div>
+                                <div class="labeled-graphic">
+                                    <img src="./images/unity_logo.png" alt="">
+                                    <p>Here is an explenation</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div id="footer-content">
+                <div id="footer-CTA">
+                    <h2>Explore</h2>
+                    <ul>
+                       <a href=""><li>Signup</li></a>
+                       <a href=""><li>Signin</li></a>
+                       <a href=""><li>Profile</li></a>
+                    </ul>
+                </div>
+                <div id="footer-main">
+                    <h2>Overfiew</h2>
+                    <ul>
+                        <a href=""><li>About</li></a>
+                        <a href=""><li>Contact</li></a>
+                    </ul>
+                </div>
+                <div id="footer-site-info">
+                    <h2>Explore</h2>
+                    <ul>
+                       <a href=""><li>Terms of Use</li></a>
+                       <a href=""><li>Privacy Policy</li></a>
+                    </ul>
+                </div>
+            </div>
+            <p id="footer-copyright">© 2021 <a href="">Mark Keeble</a></p>
+        </footer>
+    </div>
+    <script>
+        function processSignup() {
+            const mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+            const email = document.getElementById("sign-up-form-email").value;
+            if (!email.match(mailformat)) {
+                alert("invalid email!");
+                return;
+            }
+            let dName = document.getElementById("sign-up-form-display-name").value;
+            const password = document.getElementById("sign-up-form-password").value;
+            if (!validatePassword(password)) {
+                alert("invalid password!");
+                return;
+            }
+
+            if (dName == undefined || dName.length < 2)
+                dName = email;
+
+            const url = "http://markkeeble.com/Work-in-Progress/API/v1/signup";
+            const data = JSON.stringify({ email: email, displayName: dName, password: password });
+            const http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.setRequestHeader("Content-type", "application/json");
+            http.onreadystatechange = function () { 
+                if (http.readyState == 4 && http.status == 200) {
+                    console.log(http.responseText);
+                }
+            }
+            http.send(data);
+        }
+
+        function validatePassword(password) {
+            // Validate lowercase letters
+            var lowerCaseLetters = /[a-z]/g;
+            if(password.match(lowerCaseLetters)) {
+            } else {
+                return false;
+            }
+
+            // Validate capital letters
+            var upperCaseLetters = /[A-Z]/g;
+            if(password.match(upperCaseLetters)) {
+            } else {
+                return false;
+            }
+
+            // Validate numbers
+            var numbers = /[0-9]/g;
+            if(password.match(numbers)) {
+            } else {
+                return false;
+            }
+
+            // Validate length
+            if(password.length >= 8) {
+            } else {
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+
+</html>

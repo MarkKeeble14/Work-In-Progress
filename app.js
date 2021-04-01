@@ -2,19 +2,19 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
-const router = express.Router();
-const path = require('path');
 
 const app = express();
 const port = 3000;
-
 const get = 'GET';
 const post = 'POST';
 const put = 'PUT';
 const options = 'OPTIONS';
-const endPointRoot = '/API/v1';
+const root = '/Work-in-Progress'
+const apiRoot = '/API/v1';
+const endPointRoot = root + apiRoot;
 
 app.use(cors());
+
 // or?
 /*
 app.use(function (req, res, next) {
@@ -30,64 +30,106 @@ app.use(function (req, res, next) {
 // Create Connection
 const db = mysql.createConnection({
     host: "localhost",
-    user: "markkeeb_nodemysql",
-    password: "nodemysql123",
-    database: "work-in-progress"
+    user: "markkeeb_mark",
+    password: "markkeeble14",
+    database: "markkeeb_wip",
+    multipleStatements: true
 });
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname));
+
 const viewPath = '/views';
 
-router.get('/', function(req,res){
-    res.sendFile(path.join(__dirname + viewPath + '/landing.html'))
+app.get(root + '/', function(req,res){
+    res.sendFile(__dirname + viewPath + '/landing.html');
 });
 
-router.get('/projects', function(req,res){
-    res.sendFile(path.join(__dirname + viewPath + '/index.html'))
+app.get(root + '/projects', function(req,res){
+    res.sendFile(__dirname + viewPath + '/index.html');
 });
 
-router.get('/profile', function(req,res){
-    res.sendFile(path.join(__dirname + viewPath + '/profile.html'))
+app.get(root + '/profile', function(req,res){
+    res.sendFile(__dirname + viewPath + '/profile.html');
 });
 
-router.get('/post', function(req,res){
-    res.sendFile(path.join(__dirname + viewPath + '/post.html'))
+app.get(root + '/post', function(req,res){
+    res.sendFile(__dirname + viewPath + '/post.html');
 });
+
 
 // Endpoints
 // 3 POST
 
 // Create Account (landing)
-router.post(endPointRoot + '/signup', (req, res) => {
+app.post(endPointRoot + '/signup', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
-    res.send(email);
+    
+    let query = "INSERT INTO Accounts (email, password, display_name) VALUES ('" + email + "', '" + password + "', '" + email + "');";
+    
+    db.query(query + ';' + GetUpdateStatement('/signup', 'POST'), (err, result) => {
+        if (err) {
+            console.log(err);
+            res.send(err);
+        } else {
+            res.status(200).send(result);
+        }
+    });
 });
 
 // Create Project (post)
-router.post(endPointRoot + '/projects/create', (req, res) => {
+app.post(endPointRoot + '/projects/create', (req, res) => {
     const title = req.body.title;
     const description = req.body.description;
     const tagList = req.body.tagList;
+    const owner = req.body.ownerId;
+    
+    let query = "INSERT INTO Projects (owner_id, title, description, tag_list) VALUES (" 
+        + owner + ", '" + title + "', '" + description + "', '" + tagList + "');";
+    
+    db.query(query + ';' + GetUpdateStatement('/projects/create', 'POST'), (err, result) => {
+        if (err) {
+            console.log(err);
+            res.send(err);
+        } else {
+            res.status(200).send(result);
+        }
+    });
+    
     res.send(title);
 });
 
 // Make Comment on Someone Elses Profile (profile)
-router.post(endPointRoot + '/profile/:id', (req, res) => {
-    const id = req.params.id;
-    const user = req.body.user;
+app.post(endPointRoot + '/profile/:id', (req, res) => {
+    const from = req.params.from;
+    const to = req.body.to;
     const contents = req.body.contents;
+    
+    let query = "INSERT INTO Profile_Comments (user_made_comment, user_recieved_content, comment_content) VALUES ('" 
+        + from + "', '" + to + "', '" + contents + "');";
+    
+    db.query(query + ';' + GetUpdateStatement('/profile/:id', 'POST'), (err, result) => {
+        if (err) {
+            console.log(err);
+            res.send(err);
+        } else {
+            res.status(200).send(result);
+        }
+    });
+    
     res.send(id);
 });
 
 // 2 DELETE
 
 // Delete Project As Owner (profile?)
-router.delete(endPointRoot + '/profile/:id/:projectId', (req, res) => {
+app.delete(endPointRoot + '/profile/:id/:projectId', (req, res) => {
     const id = req.params.id;
     const projectId = req.params.projectId;
 
-    db.query('...', (err, result) => {
+    let query = "DELETE FROM Projects WHERE id = " + projectId + " AND owner_id = " + id;
+
+    db.query(query + ';' + GetUpdateStatement('/profile/:id/:projectId', 'DELETE'), (err, result) => {
         if (err) {
             throw err;
         } else {
@@ -97,10 +139,12 @@ router.delete(endPointRoot + '/profile/:id/:projectId', (req, res) => {
 });
 
 // Delete Account
-router.delete(endPointRoot + '/profile/:id', (req, res) => {
+app.delete(endPointRoot + '/profile/:id', (req, res) => {
     const id = req.params.id;
 
-    db.query('...', (err, result) => {
+    let query = "DELETE FROM Accounts WHERE id = " + id;
+
+    db.query(query + ';' + GetUpdateStatement('/profile/:id', 'DELETE'), (err, result) => {
         if (err) {
             throw err;
         } else {
@@ -112,8 +156,9 @@ router.delete(endPointRoot + '/profile/:id', (req, res) => {
 // 2 PUT
 
 // Update Project (profile?)
-router.put(endPointRoot + '/profile/projects/:projectId', (req, res) => {
+app.put(endPointRoot + '/profile/projects/:projectId', (req, res) => {
     const projectId = req.params.projectId;
+    
     let body = "";
     req.on('data', function (chunk) {
         if (chunk != null) {
@@ -121,9 +166,15 @@ router.put(endPointRoot + '/profile/projects/:projectId', (req, res) => {
             console.log(body);
         }
     });
+    
+    const title = 'mbdtf';
+    const description = 'a short description';
+    const tag_list = 'here,are,some,tags';
+    
     req.on('end', function() {
-        let query = '...';
-        db.query(query, (err, result) => {
+        let query = "UPDATE Projects SET (title = '" + title + "', description ='" 
+            + description + "', tag_list = '" + tag_list + "') WHERE id = " +  projectId;
+        db.query(query + ';' + GetUpdateStatement('/profile/projects/:projectId', 'PUT'), (err, result) => {
             if (err) {
                 throw err;
             }
@@ -134,8 +185,9 @@ router.put(endPointRoot + '/profile/projects/:projectId', (req, res) => {
 });
 
 // Update Account Info (profile)
-router.put(endPointRoot + '/profile/:id', (req, res) => {
+app.put(endPointRoot + '/profile/:id', (req, res) => {
     const id = req.params.id;
+   
     let body = "";
     req.on('data', function (chunk) {
         if (chunk != null) {
@@ -143,60 +195,79 @@ router.put(endPointRoot + '/profile/:id', (req, res) => {
             console.log(body);
         }
     });
+    
+    const display_name = 'fred';
+    const email = 'ted';
+    const url = 'www';
+    const type = 'god';
+    
     req.on('end', function() {
-        let query = '...';
-        db.query(query, (err, result) => {
+        let query = "UPDATE Accounts SET (email = '" + email + "', display_name = '" 
+            + display_name + "', personal_website_url = '" + url + "', account_type = '" + type + "') WHERE id = " + id;
+        db.query(query + ';' + GetUpdateStatement('/profile/:id', 'PUT'), (err, result) => {
             if (err) {
                 throw err;
             }
             console.log(result);
         });
         res.send(body);
-    })
+    });
 });
 
 // 1 GET
 
 // Get All Projects (index)
-router.get(endPointRoot + '/projects/fetch', (req,res) => {
-    db.query('...', (err, result) => {
+app.get(endPointRoot + '/projects/fetch', (req,res) => {
+    let query = 'SELECT * FROM `Accounts`';
+    
+    db.query(query + ';' + GetUpdateStatement('/projects/fetch', 'GET'), (err, result) => {
         if (err) {
             console.log(err);
             res.send(err);
         } else {
             res.status(200).send(result);
         }
-    })
+    });
 });
 
 // Get Account Information & Projects (profile)
-router.get(endPointRoot + '/profile/:id', (req,res) => {
+app.get(endPointRoot + '/profile/:id', (req,res) => {
     const id = req.params.id;
-    db.query('...', (err, result) => {
+    let query = "SELECT * FROM `Accounts` WHERE id = " + id;
+
+    db.query(query + ';' + GetUpdateStatement('/profile/:id', 'GET'), (err, result) => {
         if (err) {
             console.log(err);
             res.send(err);
         } else {
             res.status(200).send(result);
         }
-    })
+    });
 });
 
-// GET admin stuff
-router.get(endPointRoot + '/admin', (req,res) => {
-    const id = req.params.id;
-    db.query('...', (err, result) => {
+
+// GET Admin / Endpoint Info
+app.get(endPointRoot + '/admin', (req,res) => {
+    let query = 'SELECT * FROM `Endpoints`';
+    
+    db.query(query + ';' + GetUpdateStatement('/admin', 'GET'), (err, result) => {
         if (err) {
             console.log(err);
             res.send(err);
         } else {
             res.status(200).send(result);
         }
-    })
+    });
 });
+
+// Update the Admin Table
+function GetUpdateStatement(endpoint, method) {
+    let apiEndpoint = apiRoot + endpoint;
+    let updateStatement = "UPDATE Endpoints SET uses = ( Select uses FROM Endpoints WHERE endpoint = '" + apiEndpoint + "' AND method ='" + method + "' ) + 1 WHERE endpoint = '" + apiEndpoint + "' AND method ='" + method + "';";
+    return updateStatement;
+}
 
 // Run
-app.use('/', router);
 app.listen(process.env.port || port, function () {
     console.log('Work-In-Progress App listening on port ' + port);
 });
