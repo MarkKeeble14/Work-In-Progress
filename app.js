@@ -13,18 +13,16 @@ const root = '/Work-in-Progress'
 const apiRoot = '/API/v1';
 const endPointRoot = root + apiRoot;
 
-app.use(cors());
+// parse application/json
+app.use(bodyParser.json())
 
-// or?
-/*
-app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 
-        'Content-Type, Authorization, Content-Length, X-Requested-With');
+app.use(function(req,res,next){
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, PATCH");
+    res.header("Access-Control-Allow-Headers", "Accept, Content-Type, Authorization, X-Requested-With, application/json");
+
     next();
 });
-*/
 
 // Database
 // Create Connection
@@ -63,9 +61,10 @@ app.get(root + '/post', function(req,res){
 // Create Account (landing)
 app.post(endPointRoot + '/signup', (req, res) => {
     const email = req.body.email;
+    const dName = req.body.displayName;
     const password = req.body.password;
     
-    let query = "INSERT INTO Accounts (email, password, display_name) VALUES ('" + email + "', '" + password + "', '" + email + "');";
+    let query = "INSERT INTO Accounts (email, password, display_name) VALUES ('" + email + "', '" + password + "', '" + dName + "')";
     
     db.query(query + ';' + GetUpdateStatement('/signup', 'POST'), (err, result) => {
         if (err) {
@@ -84,8 +83,7 @@ app.post(endPointRoot + '/projects/create', (req, res) => {
     const tagList = req.body.tagList;
     const owner = req.body.ownerId;
     
-    let query = "INSERT INTO Projects (owner_id, title, description, tag_list) VALUES (" 
-        + owner + ", '" + title + "', '" + description + "', '" + tagList + "');";
+    let query = "INSERT INTO Projects (owner_id, title, description, tag_list) VALUES (" + owner + ", '" + title + "', '" + description + "', '" + tagList + "')";
     
     db.query(query + ';' + GetUpdateStatement('/projects/create', 'POST'), (err, result) => {
         if (err) {
@@ -100,15 +98,15 @@ app.post(endPointRoot + '/projects/create', (req, res) => {
 });
 
 // Make Comment on Someone Elses Profile (profile)
-app.post(endPointRoot + '/profile/:id', (req, res) => {
-    const from = req.params.from;
-    const to = req.body.to;
-    const contents = req.body.contents;
+app.post(endPointRoot + '/profile/:id/comment', (req, res) => {
+    const id = req.params.id;
+    const from = req.body.from;
+    const contents = req.body.text;
     
     let query = "INSERT INTO Profile_Comments (user_made_comment, user_recieved_content, comment_content) VALUES ('" 
-        + from + "', '" + to + "', '" + contents + "');";
+        + from + "', '" + id + "', '" + contents + "')";
     
-    db.query(query + ';' + GetUpdateStatement('/profile/:id', 'POST'), (err, result) => {
+    db.query(query + ';' + GetUpdateStatement('/profile/:id/comment', 'POST'), (err, result) => {
         if (err) {
             console.log(err);
             res.send(err);
@@ -116,8 +114,6 @@ app.post(endPointRoot + '/profile/:id', (req, res) => {
             res.status(200).send(result);
         }
     });
-    
-    res.send(id);
 });
 
 // 2 DELETE
@@ -140,7 +136,7 @@ app.delete(endPointRoot + '/profile/:id/:projectId', (req, res) => {
 
 // Delete Account
 app.delete(endPointRoot + '/profile/:id', (req, res) => {
-    const id = req.params.id;
+    const owner = req.params.id;
 
     let query = "DELETE FROM Accounts WHERE id = " + id;
 
@@ -187,30 +183,20 @@ app.put(endPointRoot + '/profile/projects/:projectId', (req, res) => {
 // Update Account Info (profile)
 app.put(endPointRoot + '/profile/:id', (req, res) => {
     const id = req.params.id;
-   
-    let body = "";
-    req.on('data', function (chunk) {
-        if (chunk != null) {
-            body += chunk;
-            console.log(body);
+    
+    const display_name = req.body.dName;
+    const email = req.body.email;
+    const url = req.body.personalURL;
+    const type = req.body.accType;
+
+    let query = "UPDATE Accounts SET (email = '" + email + "', display_name = '" + display_name + "', personal_website_url = '" + url + "', account_type = '" + type + "') WHERE id = " + id;
+    db.query(query + ';' + GetUpdateStatement('/profile/:id', 'PUT'), (err, result) => {
+        if (err) {
+            throw err;
+            res.send(err);
+        } else {
+            res.status(200).send(result);
         }
-    });
-    
-    const display_name = 'fred';
-    const email = 'ted';
-    const url = 'www';
-    const type = 'god';
-    
-    req.on('end', function() {
-        let query = "UPDATE Accounts SET (email = '" + email + "', display_name = '" 
-            + display_name + "', personal_website_url = '" + url + "', account_type = '" + type + "') WHERE id = " + id;
-        db.query(query + ';' + GetUpdateStatement('/profile/:id', 'PUT'), (err, result) => {
-            if (err) {
-                throw err;
-            }
-            console.log(result);
-        });
-        res.send(body);
     });
 });
 
@@ -230,7 +216,7 @@ app.get(endPointRoot + '/projects/fetch', (req,res) => {
     });
 });
 
-// Get Account Information & Projects (profile)
+// Get Account Information (profile)
 app.get(endPointRoot + '/profile/:id', (req,res) => {
     const id = req.params.id;
     let query = "SELECT * FROM `Accounts` WHERE id = " + id;
@@ -240,7 +226,22 @@ app.get(endPointRoot + '/profile/:id', (req,res) => {
             console.log(err);
             res.send(err);
         } else {
-            res.status(200).send(result);
+            res.status(200).send(result[0]);
+        }
+    });
+});
+
+// Get Account Projects (profile)
+app.get(endPointRoot + '/profile/:id/projects', (req,res) => {
+    const id = req.params.id;
+    let query = "SELECT * FROM `Projects` WHERE owner_id = " + id;
+
+    db.query(query + ';' + GetUpdateStatement('/profile/:id', 'GET'), (err, result) => {
+        if (err) {
+            console.log(err);
+            res.send(err);
+        } else {
+            res.status(200).send(result[0]);
         }
     });
 });

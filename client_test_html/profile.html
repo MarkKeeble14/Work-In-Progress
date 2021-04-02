@@ -75,9 +75,9 @@
                     </div>
                     <div id="profile-comments">
                         <h1>Public Comments</h1>
-                        <div id="public-comments-container">
+                        <table id="profile-comment-table">
 
-                        </div>
+                        </table>
                         <div>
                             <input type="text" value="Comment on This Profile!" id="profile-comment-input">
                             <input type="button" onclick="processMakeComment()" value="Submit">
@@ -236,6 +236,7 @@
             document.getElementById("profile-website-URL").value = pURL;
 
             getAccProjects();
+            getProfileComments();
         }
 
         function getAccProjects() {
@@ -259,12 +260,60 @@
             }
         }
 
+        function getProfileComments() {
+            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + userId + "/comments";
+            const http = new XMLHttpRequest();
+            http.open("GET", url, true);
+            http.onreadystatechange = function () { 
+                if (http.readyState == 4 && http.status == 200) {
+                    setProfileComments(http.responseText);
+                }
+            }
+            http.send();
+        }
+
+        function setProfileComments(data) {
+            const json = JSON.parse(data);
+            for(var i = 0; i < json.length; i++) {
+                var obj = json[i];
+                addComment(obj);
+            }
+            const table = document.getElementById("profile-comment-table");
+            // Create an empty <tr> element and add it to the 1st position of the table:
+            var row = table.insertRow(0);
+
+            // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+
+            // Add some text to the new cells:
+            cell1.innerHTML = "From";
+            cell2.innerHTML = "Text";
+        }
+
+        function addComment(data) {
+            const table = document.getElementById("profile-comment-table");
+            const from = data.user_made_comment_id;
+            const text = data.comment_content;
+
+            // Create an empty <tr> element and add it to the 1st position of the table:
+            var row = table.insertRow(0);
+
+            // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+                
+            // Add some text to the new cells:
+            cell1.innerHTML = from;
+            cell2.innerHTML = text;
+        }
+
         function processMakeComment() {
             const from = 4;
-            let content = document.getElementById("profile-comment-input").value;
+            let text = document.getElementById("profile-comment-input").value;
 
-            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + userId;
-            const data = JSON.stringify({ from: from, to: userId, contents: content });
+            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + userId + "/comment";
+            const data = JSON.stringify({ from: from, to: userId, text: text });
             const http = new XMLHttpRequest();
             http.open("POST", url, true);
             http.setRequestHeader("Content-type", "application/json");
