@@ -119,14 +119,13 @@ app.post(endPointRoot + '/profile/:id/comment', (req, res) => {
 app.post(endPointRoot + '/authenticate', (req,res) => {
     const email = req.body.email;
     const password = req.body.password;
-    let query = "SELECT * FROM `Accounts` WHERE email = '" + email + "' AND password = '" + password + "'";
+    let query = "SELECT email, display_name, personal_website_url, account_type FROM `Accounts` WHERE email = '" + email + "' AND password = '" + password + "'";
 
     db.query(query + ';' + GetUpdateStatement('/authenticate', 'POST'), (err, result) => {
         if (err) {
             console.log(err);
             res.send(err);
         } else {
-            
             if (result[0].length > 0) {
                 res.status(200).send(result[0]);   
             } else {
@@ -262,7 +261,7 @@ app.get(endPointRoot + '/projects/fetch', (req,res) => {
 // Get Account Information (profile)
 app.get(endPointRoot + '/profile/:id', (req,res) => {
     const id = req.params.id;
-    let query = "SELECT * FROM `Accounts` WHERE id = " + id;
+    let query = "SELECT id, email, display_name, personal_website_url, account_type FROM `Accounts` WHERE id = " + id;
 
     db.query(query + ';' + GetUpdateStatement('/profile/:id', 'GET'), (err, result) => {
         if (err) {
@@ -289,12 +288,42 @@ app.get(endPointRoot + '/profile/:id/projects', (req,res) => {
     });
 });
 
+// Get Account Projects (profile)
+app.get(endPointRoot + '/profile/:id/projects/owned', (req,res) => {
+    const id = req.params.id;
+    let query = "SELECT * FROM `Projects` WHERE owner_id = " + id;
+
+    db.query(query + ';' + GetUpdateStatement('/profile/:id/projects/owned', 'GET'), (err, result) => {
+        if (err) {
+            console.log(err);
+            res.send(err);
+        } else {
+            res.status(200).send(result[0]);
+        }
+    });
+});
+
 // Get Account Comments (profile)
 app.get(endPointRoot + '/profile/:id/comments', (req,res) => {
     const id = req.params.id;
     let query = "SELECT * FROM `Account_Comments` WHERE user_recieved_comment_id = " + id;
 
     db.query(query + ';' + GetUpdateStatement('/profile/:id/comments', 'GET'), (err, result) => {
+        if (err) {
+            console.log(err);
+            res.send(err);
+        } else {
+            res.status(200).send(result[0]);
+        }
+    });
+});
+
+// Get Project Information
+app.get(endPointRoot + '/projects/:id', (req,res) => {
+    const id = req.params.id;
+    let query = "SELECT * FROM `Projects` WHERE id = " + id;
+
+    db.query(query + ';' + GetUpdateStatement('/projects/:id', 'GET'), (err, result) => {
         if (err) {
             console.log(err);
             res.send(err);
