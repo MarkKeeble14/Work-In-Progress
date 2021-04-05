@@ -36,11 +36,6 @@
                 <h1>Profile</h1>
                 <input type="button" onclick="processDeleteAcc()" value="Delete My Account">
                 <div id="profile-persona-container">
-                    <div>
-                        <h1>Picture</h1>
-                        <img id="profile-picture" src="./images/unity_logo.png" alt="">
-                        <button>Change</button>
-                    </div>
                     <div id="profile-details">
                         <h1>Info</h1>
                         <div id="profile-registered-date">
@@ -53,25 +48,6 @@
                         </div>
                         <input id="profile-account-type" type="text" placeholder="Account Type">
                         <input id="profile-submit" type="button" onclick="processUpdateAccountInfo()" value="Update">
-                        <!--
-                        <div id="profile-types" class="checkbox-list-container">
-                            <h4>Skills</h4>
-                            <ul id="profile-types-selectors" class="checkbox-list">
-                                <li class="profile-types-select checkbox-item">
-                                  <input class="profile-types-checkbox" name="profile-types-programmer" type="checkbox"/>
-                                  <label class="profile-types-label" for="profile-types-programmer">Programming</label>
-                                </li>
-                                <li class="profile-types-select checkbox-item">
-                                    <input class="profile-types-checkbox" name="profile-types-artist" type="checkbox"/>
-                                    <label class="profile-types-label" for="profile-types-artist">Artist</label>
-                                </li>
-                                <li class="profile-types-select checkbox-item">
-                                    <input class="profile-types-checkbox" name="profile-types-audio-engineer" type="checkbox"/>
-                                    <label class="profile-types-label" for="profile-types-audio-engineer">Audio Engineer</label>
-                                </li>
-                            </ul>
-                        </div>
-                        -->
                     </div>
                     <div id="profile-comments">
                         <h1>Public Comments</h1>
@@ -88,53 +64,6 @@
             <div id="profile-projects-container">
                 <h1>Projects</h1>
                 <div id="item-display">
-                    <!-- This is an example of the project container -->
-                    <div class="proj-container proj-inactive">
-                        <div class="proj-details">
-                            <div class="proj-bg proj-bg-fader"></div>
-                            <div class="proj-bg"></div>
-                            <div class="proj-info">
-                                <h3 class="proj-title">Dark Twisted Fantasy</h3>
-                                <div class="proj-tags-container">
-                                    <div class="proj-tags-list">
-                                        <p>Pixel Art</p>
-                                        <p>2D</p>
-                                        <p>Top Down</p>
-                                    </div>
-                                    <div class="proj-tags-list">
-                                        <p>Rogue-Like</p>
-                                        <p>FPS</p>
-                                        <p>Dungeon-Crawler</p>
-                                    </div>
-                                </div>
-                                <a class="proj-share" href="./index.html">Share</a>
-                                <img class="proj-target-platform-img" src="./images/unity_logo.png" alt="Target platform">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="proj-container proj-active">
-                        <div class="proj-details">
-                            <div class="proj-bg proj-bg-fader"></div>
-                            <div class="proj-bg"></div>
-                            <div class="proj-info">
-                                <h3 class="proj-title">Dark Twisted Fantasy</h3>
-                                <div class="proj-tags-container">
-                                    <div class="proj-tags-list">
-                                        <p>Pixel Art</p>
-                                        <p>2D</p>
-                                        <p>Top Down</p>
-                                    </div>
-                                    <div class="proj-tags-list">
-                                        <p>Rogue-Like</p>
-                                        <p>FPS</p>
-                                        <p>Dungeon-Crawler</p>
-                                    </div>
-                                </div>
-                                <a class="proj-share" href="./index.html">Share</a>
-                                <img class="proj-target-platform-img" src="./images/unity_logo.png" alt="Target platform">
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -164,17 +93,54 @@
                 </div>
             </div>
             <p id="footer-copyright">© 2021 <a href="">Mark Keeble</a></p>
+            <input type="button" onclick="testOtherPut()" value="test">
         </footer>
     </div>
     <script>
-        let userId;
+        let loggedInId;
+        let profileId;
+        let loggedInDName;
+        let profileDName;
+
+        function processUpdateProject() {
+            // Replace this with getting the data from the fields
+            const title = "other title";
+            const description = "new description";
+            const tagList = "this,is,new";
+
+            const url = "http://markkeeble.com/Work-in-Progress/API/v1/projects/" + 2;
+            const data = JSON.stringify({ title: title, description: description, tagList: tagList });
+            const http = new XMLHttpRequest();
+            http.open("PUT", url, true);
+            http.setRequestHeader("Content-type", "application/json");
+            http.onreadystatechange = function () { 
+                if (http.readyState == 4 && http.status == 200) {
+                    console.log(http.responseText);
+                }
+            }
+            http.send(data);
+        }
+
+        function checkUser() {
+            // Retrieve the object from storage
+            var retrievedObject = localStorage.getItem('user');
+
+            if (retrievedObject != null && retrievedObject != undefined) {
+                const json = JSON.parse(retrievedObject);
+                loggedInId = json.id;
+                loggedInDName = json.display_name;
+            }
+            getAccData();
+        }
+        checkUser();
+
         function processUpdateAccountInfo() {
             const dName = document.getElementById("profile-display-name").value;
             const personalURL = document.getElementById("profile-website-URL").value;
             const accType = document.getElementById("profile-account-type").value;
             const email = document.getElementById("profile-email").value;
 
-            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/update";
+            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId;
             const data = JSON.stringify({ dName: dName, personalURL: personalURL, accType: accType, email: email });
             const http = new XMLHttpRequest();
             http.open("PUT", url, true);
@@ -187,26 +153,23 @@
             http.send(data);
         }
 
-        function processDeleteAcc() {
-            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + userId;
-            const http = new XMLHttpRequest();
-            const data = JSON.stringify({ accId: userId });
-            http.open("DELETE", url, true);
-            http.setRequestHeader("Content-type", "application/json");
-            http.onreadystatechange = function () { 
-                if (http.readyState == 4 && http.status == 200) {
-                    console.log(http.responseText);
-                }
-            }
-            http.send(data);
-        }
-
         function getAccData() {
             const urlParams = new URLSearchParams(window.location.search);
-            userId = urlParams.get('userid');
+            profileId = urlParams.get('id');
 
-            if (userId != null && userId != undefined) {
-                const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + userId;
+            if (profileId != null && profileId != undefined) {
+                getAccDataID(profileId);
+            } else {
+                if (loggedInId) {
+                    getAccDataID(loggedInId);
+                } else {
+                    console.log("no id given; empty profile");
+                }
+            }
+        }
+
+        function getAccDataID(id) {
+            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + id;
                 const http = new XMLHttpRequest();
                 http.open("GET", url, true);
                 http.onreadystatechange = function () { 
@@ -215,20 +178,21 @@
                     }
                 }
                 http.send();
-            } else {
-                console.log("no id given");
-            }
         }
-        getAccData();
+        
 
         function setProfileInfo(data) {
             const json = JSON.parse(data)[0];
+            if (json == undefined)
+                return;
             console.log(json);
             const email = json.email;
             const displayName = json.display_name;
             const accType = json.account_type;
             const pURL = json.personal_website_url;
-            userId = json.id;
+
+            profileId = json.id;
+            profileDName = displayName;
 
             document.getElementById("profile-display-name").value = displayName;
             document.getElementById("profile-email").value = email;
@@ -240,7 +204,7 @@
         }
 
         function getAccProjects() {
-            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + userId + "/projects";
+            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId + "/projects";
             const http = new XMLHttpRequest();
             http.open("GET", url, true);
             http.onreadystatechange = function () { 
@@ -256,12 +220,18 @@
             for(var i = 0; i < json.length; i++) {
                 var obj = json[i];
                 
-                console.log(obj);
+                createCard(obj);
             }
         }
 
         function getProfileComments() {
-            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + userId + "/comments";
+            let url;
+            if (profileId != null && profileId != undefined) {
+                url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + profileId + "/comments";
+            } else {
+                url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId + "/comments";
+            }
+
             const http = new XMLHttpRequest();
             http.open("GET", url, true);
             http.onreadystatechange = function () { 
@@ -309,20 +279,163 @@
         }
 
         function processMakeComment() {
-            const from = 4;
-            let text = document.getElementById("profile-comment-input").value;
+            // Retrieve the object from storage
+            var retrievedObject = localStorage.getItem('user');
 
-            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + userId + "/comment";
-            const data = JSON.stringify({ from: from, to: userId, text: text });
+            if (retrievedObject != null && retrievedObject != undefined 
+                && profileId != null && profileId != undefined) {
+                const json = JSON.parse(retrievedObject);
+
+                let text = document.getElementById("profile-comment-input").value;
+
+                const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + profileId + "/comment";
+                const data = JSON.stringify({ from: loggedInId, from_name: loggedInDName, to: profileId, to_name: profileDName, text: text });
+                const http = new XMLHttpRequest();
+                http.open("POST", url, true);
+                http.setRequestHeader("Content-type", "application/json");
+                http.onreadystatechange = function () { 
+                    if (http.readyState == 4 && http.status == 200) {
+                        console.log(http.responseText);
+                    }
+                }
+                http.send(data);
+            }
+        }
+
+        function createProjectsFromData(data) {
+            const json = JSON.parse(data)[0];
+            console.log(json);
+            for(var i = 0; i < json.length; i++) {
+                var obj = json[i];
+
+                createCard(obj);
+            }
+        }
+
+        function createCard(obj) {
+            let d1 = document.createElement('div');
+            d1.setAttribute("id", "project-card-" + obj.id);
+            d1.setAttribute("class", "proj-container proj-active");
+            d1.addEventListener('click', function() {
+                leaveProject(obj.id);
+            });
+
+            let d2 = document.createElement('div');
+            d2.setAttribute("class", "proj-details");
+
+            let d3 = document.createElement('div');
+            d3.setAttribute("class", "proj-bg proj-bg-fader");
+            
+            let d4 = document.createElement('div');
+            d4.setAttribute("class", "proj-bg");
+
+            let d5 = document.createElement('div');
+            d5.setAttribute("class", "proj-info")
+
+            let title = document.createElement('h3');
+            title.setAttribute("class", "proj-title");
+            title.innerHTML = obj.title;
+
+            let d6 = document.createElement('div');
+            d6.setAttribute("class", "proj-tags-container");
+
+            let d7 = document.createElement('div');
+            d7.setAttribute("class", "proj-tags-list");
+
+            let share = document.createElement('a');
+            share.innerHTML = "Share";
+            share.setAttribute("class", "proj-share");
+            share.setAttribute("href", "./index.html");
+
+            setTagList(d7, obj.tag_list);
+            
+            d6.appendChild(d7);
+            d5.appendChild(title);
+            d5.appendChild(d6);
+            // d5.appendChild(share);
+            d2.appendChild(d3);
+            d2.appendChild(d4);
+            d2.appendChild(d5);
+            d1.appendChild(d2);
+
+            let container = document.getElementById("item-display");
+            container.appendChild(d1);
+        }
+
+        function setTagList(node, str) {
+            let list = str.split(",");
+            list.forEach(element => {
+                let p = document.createElement("p");
+                p.innerHTML = element;
+                node.appendChild(p);
+            });
+        }
+
+        function leaveProject(projId) {
+            var retrievedObject = localStorage.getItem('user');
+
+            if (retrievedObject != null && retrievedObject != undefined) {
+                const json = JSON.parse(retrievedObject);
+                let loggedInId = json.id;
+
+                accountLeaveProject(loggedInId, projId)
+            }
+        }
+
+        function accountLeaveProject(userId, projId) {
+            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + userId + "/projects/" + projId;
             const http = new XMLHttpRequest();
-            http.open("POST", url, true);
-            http.setRequestHeader("Content-type", "application/json");
+            http.open("GET", url, true);
+            http.onreadystatechange = function () { 
+                if (http.readyState == 4 && http.status == 200) {
+                    console.log(http.responseText);
+                    if (http.responseText == "false") {
+                        console.log("deleting from acc");
+                        deleteProjectFromAccount(userId, projId);
+                    } else {
+                        console.log("deleting from life");
+                        deleteProjectFromExistence(userId, projId);
+                    }
+                }
+            }
+            http.send();
+        }
+
+        function deleteProjectFromAccount(userId, projId) {
+            console.log(userId, projId);
+            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + userId + "/projects/" + projId + "/leave";
+            const http = new XMLHttpRequest();
+            http.open("DELETE", url, true);
             http.onreadystatechange = function () { 
                 if (http.readyState == 4 && http.status == 200) {
                     console.log(http.responseText);
                 }
             }
-            http.send(data);
+            http.send();
+        }
+
+        function deleteProjectFromExistence(userId, projId) {
+            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + userId + "/projects/" + projId + "/delete";
+            const http = new XMLHttpRequest();
+            http.open("DELETE", url, true);
+            http.onreadystatechange = function () { 
+                if (http.readyState == 4 && http.status == 200) {
+                    console.log(http.responseText);
+                }
+            }
+            http.send();
+        }
+
+        function processDeleteAcc() {
+            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId + "/delete";
+            const http = new XMLHttpRequest();
+            http.open("DELETE", url, true);
+            http.onreadystatechange = function () { 
+                if (http.readyState == 4 && http.status == 200) {
+                    console.log(http.responseText);
+                }
+            }
+            http.send();
         }
     </script>
 </body>

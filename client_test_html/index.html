@@ -33,34 +33,9 @@
             <div id="item-display-heading">
                 <h1>Available Projects</h1>
                 <div id="item-display-options">
-                    <p>Projects Needing: </p>
                 </div>
             </div>
             <div id="item-display">
-                <!-- This is an example of the project container -->
-                <div class="proj-container proj-active">
-                    <div class="proj-details">
-                        <div class="proj-bg proj-bg-fader"></div>
-                        <div class="proj-bg"></div>
-                        <div class="proj-info">
-                            <h3 class="proj-title">Dark Twisted Fantasy</h3>
-                            <div class="proj-tags-container">
-                                <div class="proj-tags-list">
-                                    <p>Pixel Art</p>
-                                    <p>2D</p>
-                                    <p>Top Down</p>
-                                </div>
-                                <div class="proj-tags-list">
-                                    <p>Rogue-Like</p>
-                                    <p>FPS</p>
-                                    <p>Dungeon-Crawler</p>
-                                </div>
-                            </div>
-                            <a class="proj-share" href="./index.html">Share</a>
-                            <img class="proj-target-platform-img" src="./images/unity_logo.png" alt="Target platform">
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
         <footer>
@@ -92,7 +67,111 @@
         </footer>
     </div>
     <script>
-        
+        function getProjects() {
+            const url = "http://markkeeble.com/Work-in-Progress/API/v1/projects/fetch";
+            const http = new XMLHttpRequest();
+            http.open("GET", url, true);
+            http.onreadystatechange = function () { 
+                if (http.readyState == 4 && http.status == 200) {
+                    createProjectsFromData(http.responseText);
+                }
+            }
+            http.send();
+        }
+        getProjects();
+
+        function createProjectsFromData(data) {
+            const json = JSON.parse(data)[0];
+            console.log(json);
+            for(var i = 0; i < json.length; i++) {
+                var obj = json[i];
+
+                createCard(obj);
+            }
+        }
+
+        function createCard(obj) {
+            let d1 = document.createElement('div');
+            d1.setAttribute("id", "project-card-" + obj.id);
+            d1.setAttribute("class", "proj-container proj-active");
+            d1.addEventListener('click', function() {
+                console.log(obj.id + " clicked");
+                joinProject(obj.id);
+            });
+
+            let d2 = document.createElement('div');
+            d2.setAttribute("class", "proj-details");
+
+            let d3 = document.createElement('div');
+            d3.setAttribute("class", "proj-bg proj-bg-fader");
+            
+            let d4 = document.createElement('div');
+            d4.setAttribute("class", "proj-bg");
+
+            let d5 = document.createElement('div');
+            d5.setAttribute("class", "proj-info")
+
+            let title = document.createElement('h3');
+            title.setAttribute("class", "proj-title");
+            title.innerHTML = obj.title;
+
+            let d6 = document.createElement('div');
+            d6.setAttribute("class", "proj-tags-container");
+
+            let d7 = document.createElement('div');
+            d7.setAttribute("class", "proj-tags-list");
+
+            let share = document.createElement('a');
+            share.innerHTML = "Share";
+            share.setAttribute("class", "proj-share");
+            share.setAttribute("href", "./index.html");
+
+            setTagList(d7, obj.tag_list);
+            
+            d6.appendChild(d7);
+            d5.appendChild(title);
+            d5.appendChild(d6);
+            //d5.appendChild(share);
+            d2.appendChild(d3);
+            d2.appendChild(d4);
+            d2.appendChild(d5);
+            d1.appendChild(d2);
+
+            let container = document.getElementById("item-display");
+            container.appendChild(d1);
+        }
+
+        function setTagList(node, str) {
+            let list = str.split(",");
+            list.forEach(element => {
+                let p = document.createElement("p");
+                p.innerHTML = element;
+                node.appendChild(p);
+            });
+        }
+
+        function joinProject(projId) {
+            var retrievedObject = localStorage.getItem('user');
+
+            if (retrievedObject != null && retrievedObject != undefined) {
+                const json = JSON.parse(retrievedObject);
+                let loggedInId = json.id;
+
+                accountJoinProject(loggedInId, projId)
+            }
+        }
+
+        function accountJoinProject(userId, projId) {
+            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + userId + "/" + projId;
+            const http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.onreadystatechange = function () { 
+                if (http.readyState == 4 && http.status == 200) {
+                    console.log(http.responseText);
+                }
+            }
+            http.send();
+        }
     </script>
 </body>
 

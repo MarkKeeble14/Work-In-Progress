@@ -42,7 +42,7 @@
                         the slightest inking of how to code. Connect these two individuals together, and they can do wonderful things.
                     </h4>
                 </div>
-                <div id="sign-up-form-container">
+                    <div id="sign-up-form-container">
                     <h1>Join Up</h1>
                     <form id="sign-up-form">
                         <input type="text" placeholder="Email" id="sign-up-form-email">
@@ -55,6 +55,18 @@
                         </div> 
                         -->
                         <input type="button" onclick="processSignup()" value="Signup">
+                    </form>
+                    <h1>Login</h1>
+                    <form id="sign-up-form">
+                        <input type="text" placeholder="Email" id="login-form-email">
+                        <input type="password" placeholder="Password" id="login-form-password">
+                        <!--
+                        <div>
+                            <input type="checkbox" name="show-pass">
+                            <label for="show-pass">Show Password</label>
+                        </div> 
+                        -->
+                        <input type="button" onclick="loginThroughForm()" value="Login">
                     </form>
                     <p>By clicking ‘Submit’, I hereby acknowledge and agree that I have read and understood Work-In-Progress Privacy Policy.</p>
                 </div>
@@ -155,7 +167,7 @@
             http.setRequestHeader("Content-type", "application/json");
             http.onreadystatechange = function () { 
                 if (http.readyState == 4 && http.status == 200) {
-                    console.log(http.responseText);
+                    loginAfterSignup(http.responseText);
                 }
             }
             http.send(data);
@@ -189,6 +201,67 @@
                 return false;
             }
             return true;
+        }
+
+        function loginAfterSignup(data) {
+            const json = JSON.parse(data);
+            
+            const id = json.insertId;
+
+            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + id;
+            const http = new XMLHttpRequest();
+            http.open("GET", url, true);
+            http.onreadystatechange = function () { 
+                if (http.readyState == 4 && http.status == 200) {
+                    login(http.responseText)
+                }
+            }
+            http.send();
+        }
+
+        function login(data) {
+            console.log(data);
+            const json = JSON.parse(data)[0];
+            const id = json.id;
+            const displayName = json.display_name;
+            
+            console.log(id, displayName);
+
+            // Store user details in local storage
+            var userDetails = { id: id, displayName: displayName };
+            localStorage.setItem('user', JSON.stringify(userDetails));
+        
+            checkUser();
+
+            // Link to profile page maybe, need to change
+            window.location.href = "file:///C:/Users/Mark/Documents/Projects/WIP/Work-In-Progress/client_test_html/profile.html?id=" + id; 
+        }
+
+        function loginThroughForm() {
+            const email = document.getElementById("login-form-email").value;
+            const password = document.getElementById("login-form-password").value;
+
+            const url = "http://markkeeble.com/Work-in-Progress/API/v1/authenticate";
+            const data = JSON.stringify({ email: email, password: password });
+            const http = new XMLHttpRequest();
+            http.open("POST", url, true);
+            http.setRequestHeader("Content-type", "application/json");
+            http.onreadystatechange = function () { 
+                if (http.readyState == 4 && http.status == 200) {
+                    const result = http.responseText;
+                    if (result != "false") {
+                        login(http.responseText);
+                    }
+                }
+            }
+            http.send(data);
+        }
+
+        function checkUser() {
+            // Retrieve the object from storage
+            var retrievedObject = localStorage.getItem('user');
+
+            console.log(JSON.parse(retrievedObject));
         }
     </script>
 </body>

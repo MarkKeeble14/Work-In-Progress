@@ -133,6 +133,20 @@
         </footer>
     </div>
     <script>
+        let loggedInId;
+        let loggedInDName;
+        function checkUser() {
+            // Retrieve the object from storage
+            var retrievedObject = localStorage.getItem('user');
+
+            if (retrievedObject != null && retrievedObject != undefined) {
+                const json = JSON.parse(retrievedObject);
+                loggedInId = json.id;
+                loggedInDName = json.display_name;
+            }
+        }
+        checkUser();
+
         function openPage(pageName,elmnt,color) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tabcontent");
@@ -154,10 +168,10 @@
             const title = document.getElementById("post-project-title").value;
             const description = document.getElementById("post-project-description").value;
             const tags = document.getElementById("post-project-tags").value;
-            const ownerId = 5;
+
 
             const url = "http://markkeeble.com/Work-in-Progress/API/v1/projects/create";
-            const data = JSON.stringify({ title: title, description: description, tagList: tags, ownerId: ownerId });
+            const data = JSON.stringify({ title: title, description: description, tagList: tags, ownerId: loggedInId });
             const http = new XMLHttpRequest();
             http.open("POST", url, true);
             http.setRequestHeader("Content-type", "application/json");
