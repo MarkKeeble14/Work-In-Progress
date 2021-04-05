@@ -35,7 +35,7 @@
                 <div id="item-display-options">
                 </div>
             </div>
-            <div id="item-display">
+            <div id="item-display" class="item-display">
             </div>
         </div>
         <footer>
@@ -95,8 +95,7 @@
             d1.setAttribute("id", "project-card-" + obj.id);
             d1.setAttribute("class", "proj-container proj-active");
             d1.addEventListener('click', function() {
-                console.log(obj.id + " clicked");
-                joinProject(obj.id);
+                goToProject(obj.id);
             });
 
             let d2 = document.createElement('div');
@@ -150,27 +149,8 @@
             });
         }
 
-        function joinProject(projId) {
-            var retrievedObject = localStorage.getItem('user');
-
-            if (retrievedObject != null && retrievedObject != undefined) {
-                const json = JSON.parse(retrievedObject);
-                let loggedInId = json.id;
-
-                accountJoinProject(loggedInId, projId)
-            }
-        }
-
-        function accountJoinProject(userId, projId) {
-            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + userId + "/" + projId;
-            const http = new XMLHttpRequest();
-            http.open("POST", url, true);
-            http.onreadystatechange = function () { 
-                if (http.readyState == 4 && http.status == 200) {
-                    console.log(http.responseText);
-                }
-            }
-            http.send();
+        function goToProject(id) {
+            window.location.href = "file:///C:/Users/Mark/Documents/Projects/WIP/Work-In-Progress/client_test_html/project.html?id=" + id;
         }
     </script>
 </body>

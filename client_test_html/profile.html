@@ -62,8 +62,11 @@
                 </div>
             </div>
             <div id="profile-projects-container">
-                <h1>Projects</h1>
-                <div id="item-display">
+                <h1>Joined Projects</h1>
+                <div id="joined-item-display" class="item-display">
+                </div>
+                <h1>Owned Projects</h1>
+                <div id="owned-item-display" class="item-display">
                 </div>
             </div>
         </div>
@@ -93,7 +96,6 @@
                 </div>
             </div>
             <p id="footer-copyright">© 2021 <a href="">Mark Keeble</a></p>
-            <input type="button" onclick="testOtherPut()" value="test">
         </footer>
     </div>
     <script>
@@ -200,6 +202,7 @@
             document.getElementById("profile-website-URL").value = pURL;
 
             getAccProjects();
+            getOwnedProjects();
             getProfileComments();
         }
 
@@ -209,18 +212,33 @@
             http.open("GET", url, true);
             http.onreadystatechange = function () { 
                 if (http.readyState == 4 && http.status == 200) {
-                    setProfileProjects(http.responseText);
+                    let node = document.getElementById("joined-item-display");
+                    setProfileProjects(http.responseText, node);
                 }
             }
             http.send();
         }
 
-        function setProfileProjects(data) {
+        function getOwnedProjects() {
+            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId + "/projects/owned";
+            const http = new XMLHttpRequest();
+            http.open("GET", url, true);
+            http.onreadystatechange = function () { 
+                if (http.readyState == 4 && http.status == 200) {
+                    let node = document.getElementById("owned-item-display");
+                    setProfileProjects(http.responseText, node);
+                    console.log(http.responseText);
+                }
+            }
+            http.send();
+        }
+
+        function setProfileProjects(data, attachTo) {
             const json = JSON.parse(data);
             for(var i = 0; i < json.length; i++) {
                 var obj = json[i];
                 
-                createCard(obj);
+                createCard(obj, attachTo);
             }
         }
 
@@ -302,22 +320,12 @@
             }
         }
 
-        function createProjectsFromData(data) {
-            const json = JSON.parse(data)[0];
-            console.log(json);
-            for(var i = 0; i < json.length; i++) {
-                var obj = json[i];
-
-                createCard(obj);
-            }
-        }
-
-        function createCard(obj) {
+        function createCard(obj, attachTo) {
             let d1 = document.createElement('div');
             d1.setAttribute("id", "project-card-" + obj.id);
             d1.setAttribute("class", "proj-container proj-active");
             d1.addEventListener('click', function() {
-                leaveProject(obj.id);
+                goToProject(obj.id);
             });
 
             let d2 = document.createElement('div');
@@ -358,8 +366,7 @@
             d2.appendChild(d5);
             d1.appendChild(d2);
 
-            let container = document.getElementById("item-display");
-            container.appendChild(d1);
+            attachTo.appendChild(d1);
         }
 
         function setTagList(node, str) {
@@ -371,59 +378,9 @@
             });
         }
 
-        function leaveProject(projId) {
-            var retrievedObject = localStorage.getItem('user');
-
-            if (retrievedObject != null && retrievedObject != undefined) {
-                const json = JSON.parse(retrievedObject);
-                let loggedInId = json.id;
-
-                accountLeaveProject(loggedInId, projId)
-            }
-        }
-
-        function accountLeaveProject(userId, projId) {
-            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + userId + "/projects/" + projId;
-            const http = new XMLHttpRequest();
-            http.open("GET", url, true);
-            http.onreadystatechange = function () { 
-                if (http.readyState == 4 && http.status == 200) {
-                    console.log(http.responseText);
-                    if (http.responseText == "false") {
-                        console.log("deleting from acc");
-                        deleteProjectFromAccount(userId, projId);
-                    } else {
-                        console.log("deleting from life");
-                        deleteProjectFromExistence(userId, projId);
-                    }
-                }
-            }
-            http.send();
-        }
-
-        function deleteProjectFromAccount(userId, projId) {
-            console.log(userId, projId);
-            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + userId + "/projects/" + projId + "/leave";
-            const http = new XMLHttpRequest();
-            http.open("DELETE", url, true);
-            http.onreadystatechange = function () { 
-                if (http.readyState == 4 && http.status == 200) {
-                    console.log(http.responseText);
-                }
-            }
-            http.send();
-        }
-
-        function deleteProjectFromExistence(userId, projId) {
-            const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + userId + "/projects/" + projId + "/delete";
-            const http = new XMLHttpRequest();
-            http.open("DELETE", url, true);
-            http.onreadystatechange = function () { 
-                if (http.readyState == 4 && http.status == 200) {
-                    console.log(http.responseText);
-                }
-            }
-            http.send();
+        // CHANGE URL
+        function goToProject(id) {
+            window.location.href = "file:///C:/Users/Mark/Documents/Projects/WIP/Work-In-Progress/client_test_html/project.html?id=" + id;
         }
 
         function processDeleteAcc() {
