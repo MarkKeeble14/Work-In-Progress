@@ -7,10 +7,10 @@
 
     <title>Work-In-Progress | Welcome</title>
 
-    <link rel="stylesheet" href="./css/styles.css">
-    <link rel="stylesheet" href="./css/landing-styles.css">
-    <link rel="stylesheet" href="./css/footer.css">
-    <link rel="stylesheet" href="./css/header.css">
+    <link rel="stylesheet" href="./public/css/styles.css">
+    <link rel="stylesheet" href="./public/css/landing-styles.css">
+    <link rel="stylesheet" href="./public/css/footer.css">
+    <link rel="stylesheet" href="./public/css/header.css">
 </head>
 
 <body>
@@ -23,10 +23,10 @@
             </div>
             <div id="header-menu">
                 <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="projects">Browse</a></li>
-                    <li><a href="profile">Profile</a></li>
-                    <li><a href="post">Post</a></li>
+                    <li><a href="./landing.html">Home</a></li>
+                    <li><a href="./index.html">Browse</a></li>
+                    <li><a href="./profile.html">Profile</a></li>
+                    <li><a href="./post.html">Post</a></li>
                 </ul>
             </div>
         </header>
@@ -42,17 +42,31 @@
                         the slightest inking of how to code. Connect these two individuals together, and they can do wonderful things.
                     </h4>
                 </div>
-                <div id="sign-up-form-container">
+                    <div id="sign-up-form-container">
                     <h1>Join Up</h1>
-                    <form action="" id="sign-up-form">
-                        <input type="text" placeholder="Email">
-                        <input type="text" placeholder="Display Name">
-                        <input type="password" placeholder="Password">
+                    <form id="sign-up-form">
+                        <input type="text" placeholder="Email" id="sign-up-form-email">
+                        <input type="text" placeholder="Display Name" id="sign-up-form-display-name">
+                        <input type="password" placeholder="Password" id="sign-up-form-password">
+                        <!--
                         <div>
                             <input type="checkbox" name="show-pass">
                             <label for="show-pass">Show Password</label>
-                        </div>
-                        <input type="submit">
+                        </div> 
+                        -->
+                        <input type="button" onclick="processSignup()" value="Signup">
+                    </form>
+                    <h1>Login</h1>
+                    <form id="sign-up-form">
+                        <input type="text" placeholder="Email" id="login-form-email">
+                        <input type="password" placeholder="Password" id="login-form-password">
+                        <!--
+                        <div>
+                            <input type="checkbox" name="show-pass">
+                            <label for="show-pass">Show Password</label>
+                        </div> 
+                        -->
+                        <input type="button" onclick="loginThroughForm()" value="Login">
                     </form>
                     <p>By clicking ‘Submit’, I hereby acknowledge and agree that I have read and understood Work-In-Progress Privacy Policy.</p>
                 </div>
@@ -65,15 +79,15 @@
                             <h1>Find a Project To Contribute to</h1>
                             <div class="gallary">
                                 <div class="labeled-graphic">
-                                    <img src="./images/unity_logo.png" alt="">
+                                    <img src="./public/images/unity_logo.png" alt="">
                                     <p>Here is an explenation</p>
                                 </div>
                                 <div class="labeled-graphic">
-                                    <img src="./images/unity_logo.png" alt="">
+                                    <img src="./public/images/unity_logo.png" alt="">
                                     <p>Here is an explenation</p>
                                 </div>
                                 <div class="labeled-graphic">
-                                    <img src="./images/unity_logo.png" alt="">
+                                    <img src="./public/images/unity_logo.png" alt="">
                                     <p>Here is an explenation</p>
                                 </div>
                             </div>
@@ -82,15 +96,15 @@
                             <h1>Create a Project for Others to Find</h1>
                             <div class="gallary">
                                 <div class="labeled-graphic">
-                                    <img src="./images/unity_logo.png" alt="">
+                                    <img src="./public/images/unity_logo.png" alt="">
                                     <p>Here is an explenation</p>
                                 </div>
                                 <div class="labeled-graphic">
-                                    <img src="./images/unity_logo.png" alt="">
+                                    <img src="./public/images/unity_logo.png" alt="">
                                     <p>Here is an explenation</p>
                                 </div>
                                 <div class="labeled-graphic">
-                                    <img src="./images/unity_logo.png" alt="">
+                                    <img src="./public/images/unity_logo.png" alt="">
                                     <p>Here is an explenation</p>
                                 </div>
                             </div>
@@ -127,6 +141,7 @@
             <p id="footer-copyright">© 2021 <a href="">Mark Keeble</a></p>
         </footer>
     </div>
+    <script src="./public/js/landing.js"></script>
 </body>
 
 </html>
