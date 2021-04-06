@@ -108,11 +108,13 @@ function loginThroughForm() {
     http.setRequestHeader("Content-type", "application/json");
     http.onreadystatechange = function () { 
         if (http.readyState == 4) {
-            if (http.status == 200) {
+            if (http.status == 200 || http.status == 403) {
                 const result = http.responseText;
                 if (result != "false") {
                     login(http.responseText);
                 }
+                console.log(http.status);
+                console.log(http.responseText);
             } else {
                 console.log(http.responseText);
             }

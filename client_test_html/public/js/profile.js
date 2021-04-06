@@ -30,6 +30,9 @@ function checkUser() {
         const json = JSON.parse(retrievedObject);
         loggedInId = json.id;
         loggedInDName = json.display_name;
+
+        console.log(loggedInId);
+        console.log(json);
     }
     getAccData();
 }
