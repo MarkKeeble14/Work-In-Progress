@@ -16,8 +16,8 @@ function processSignup() {
     if (dName == undefined || dName.length < 2)
         dName = email;
 
-    const url = "http://markkeeble.com/Work-in-Progress/API/v1/signup";
-    const data = JSON.stringify({ email: email, displayName: dName, password: password });
+    const url = "https://markkeeble.com/Work-in-Progress/API/v1/signup";
+    const data = JSON.stringify({ email: email, displayName: dName, password: password, apiKey1: "MYAPIKey" });
     const http = new XMLHttpRequest();
     
     http.open("POST", url, true);
@@ -66,12 +66,12 @@ function validatePassword(password) {
 
 function loginAfterSignup(data) {
     const json = JSON.parse(data);
-    
     const id = json.insertId;
 
-    const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + id;
+    const url = "https://markkeeble.com/Work-in-Progress/API/v1/profile/" + id;
     const http = new XMLHttpRequest();
-    http.open("GET", url, true);
+    const key = "?apiKey1=MyAPIKey";
+    http.open("GET", url + key, true);
     http.onreadystatechange = function () { 
         if (http.readyState == 4) {
             if (http.status == 200) {
@@ -94,15 +94,15 @@ function login(data) {
     localStorage.setItem('user', JSON.stringify(userDetails));
 
     // Link to profile page maybe, need to change
-    window.location.href = "file:///C:/Users/Mark/Documents/Projects/WIP/Work-In-Progress/client_test_html/profile.html?id=" + id; 
+    window.location.href = "https://justinxie.ca/assignment/profile.html?id=" + id; 
 }
 
 function loginThroughForm() {
     const email = document.getElementById("login-form-email").value;
     const password = document.getElementById("login-form-password").value;
 
-    const url = "http://markkeeble.com/Work-in-Progress/API/v1/authenticate";
-    const data = JSON.stringify({ email: email, password: password });
+    const url = "https://markkeeble.com/Work-in-Progress/API/v1/authenticate";
+    const data = JSON.stringify({ email: email, password: password, apiKey1: "MYAPIKey"  });
     const http = new XMLHttpRequest();
     http.open("POST", url, true);
     http.setRequestHeader("Content-type", "application/json");

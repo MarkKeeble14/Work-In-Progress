@@ -9,8 +9,8 @@ function processUpdateProject() {
     const description = "new description";
     const tagList = "this,is,new";
 
-    const url = "http://markkeeble.com/Work-in-Progress/API/v1/projects/" + 2;
-    const data = JSON.stringify({ title: title, description: description, tagList: tagList });
+    const url = "https://markkeeble.com/Work-in-Progress/API/v1/projects/" + 2;
+    const data = JSON.stringify({ title: title, description: description, tagList: tagList, apiKey1: "MYAPIKey" });
     const http = new XMLHttpRequest();
     http.open("PUT", url, true);
     http.setRequestHeader("Content-type", "application/json");
@@ -41,8 +41,8 @@ function processUpdateAccountInfo() {
     const accType = document.getElementById("profile-account-type").value;
     const email = document.getElementById("profile-email").value;
 
-    const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId;
-    const data = JSON.stringify({ dName: dName, personalURL: personalURL, accType: accType, email: email });
+    const url = "https://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId;
+    const data = JSON.stringify({ dName: dName, personalURL: personalURL, accType: accType, email: email, apiKey1: "MYAPIKey" });
     const http = new XMLHttpRequest();
     http.open("PUT", url, true);
     http.setRequestHeader("Content-type", "application/json");
@@ -70,9 +70,10 @@ function getAccData() {
 }
 
 function getAccDataID(id) {
-    const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + id;
+    const url = "https://markkeeble.com/Work-in-Progress/API/v1/profile/" + id;
     const http = new XMLHttpRequest();
-    http.open("GET", url, true);
+    const key = "?apiKey1=MyAPIKey";
+    http.open("GET", url + key, true);
     http.onreadystatechange = function () { 
         if (http.readyState == 4) {
             if (http.status == 200) {
@@ -109,9 +110,10 @@ function setProfileInfo(data) {
 }
 
 function getAccProjects() {
-    const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId + "/projects";
+    const url = "https://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId + "/projects";
     const http = new XMLHttpRequest();
-    http.open("GET", url, true);
+    const key = "?apiKey1=MyAPIKey";
+    http.open("GET", url + key, true);
     http.onreadystatechange = function () { 
         if (http.readyState == 4) {
             if (http.status == 200) {
@@ -126,9 +128,10 @@ function getAccProjects() {
 }
 
 function getOwnedProjects() {
-    const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId + "/projects/owned";
+    const url = "https://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId + "/projects/owned";
     const http = new XMLHttpRequest();
-    http.open("GET", url, true);
+    const key = "?apiKey1=MyAPIKey";
+    http.open("GET", url + key, true);
     http.onreadystatechange = function () { 
         if (http.readyState == 4) {
             if (http.status == 200) {
@@ -154,13 +157,14 @@ function setProfileProjects(data, attachTo) {
 function getProfileComments() {
     let url;
     if (profileId != null && profileId != undefined) {
-        url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + profileId + "/comments";
+        url = "https://markkeeble.com/Work-in-Progress/API/v1/profile/" + profileId + "/comments";
     } else {
-        url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId + "/comments";
+        url = "https://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId + "/comments";
     }
+    const key = "?apiKey1=MyAPIKey";
 
     const http = new XMLHttpRequest();
-    http.open("GET", url, true);
+    http.open("GET", url + key, true);
     http.onreadystatechange = function () { 
         if (http.readyState == 4) {
             if (http.status == 200) {
@@ -219,8 +223,8 @@ function processMakeComment() {
 
         let text = document.getElementById("profile-comment-input").value;
 
-        const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + profileId + "/comment";
-        const data = JSON.stringify({ from: loggedInId, from_name: loggedInDName, to: profileId, to_name: profileDName, text: text });
+        const url = "https://markkeeble.com/Work-in-Progress/API/v1/profile/" + profileId + "/comment";
+        const data = JSON.stringify({ from: loggedInId, from_name: loggedInDName, to: profileId, to_name: profileDName, text: text, apiKey1: "MYAPIKey" });
         const http = new XMLHttpRequest();
         http.open("POST", url, true);
         http.setRequestHeader("Content-type", "application/json");
@@ -293,13 +297,14 @@ function setTagList(node, str) {
 
 // CHANGE URL
 function goToProject(id) {
-    window.location.href = "file:///C:/Users/Mark/Documents/Projects/WIP/Work-In-Progress/front-end/project.html?id=" + id;
+    window.location.href = "https://justinxie.ca/assignment/project.html?id=" + id;
 }
 
 function processDeleteAcc() {
-    const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId + "/delete";
+    const url = "https://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId + "/delete";
+    const key = "?apiKey1=MyAPIKey";
     const http = new XMLHttpRequest();
-    http.open("DELETE", url, true);
+    http.open("DELETE", url + key, true);
     http.onreadystatechange = function () { 
         if (http.readyState == 4) {
             console.log(http.responseText);

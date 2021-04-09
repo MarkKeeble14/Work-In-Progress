@@ -1,7 +1,8 @@
 function getProjects() {
-    const url = "http://markkeeble.com/Work-in-Progress/API/v1/projects/fetch";
+    const url = "https://markkeeble.com/Work-in-Progress/API/v1/projects/fetch";
     const http = new XMLHttpRequest();
-    http.open("GET", url, true);
+    const key = "?apiKey1=MyAPIKey";
+    http.open("GET", url + key, true);
     http.onreadystatechange = function () { 
         if (http.readyState == 4) {
             if (http.status == 200) {
@@ -85,5 +86,5 @@ function setTagList(node, str) {
 
 // CHANGE URL
 function goToProject(id) {
-    window.location.href = "file:///C:/Users/Mark/Documents/Projects/WIP/Work-In-Progress/front-end/project.html?id=" + id;
+    window.location.href = "https://justinxie.ca/assignment/project.html?id=" + id;
 }

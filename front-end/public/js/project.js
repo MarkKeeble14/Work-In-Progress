@@ -25,9 +25,10 @@ function checkUser() {
 checkUser();
 
 function checkIfOwner() {
-    const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId + "/projects/" + projectId;
+    const url = "https://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId + "/projects/" + projectId;
     const http = new XMLHttpRequest();
-    http.open("GET", url, true);
+    const key = "?apiKey1=MyAPIKey";
+    http.open("GET", url + key, true);
     http.onreadystatechange = function () { 
         if (http.readyState == 4) {
             if (http.status == 200) {
@@ -45,9 +46,10 @@ function checkIfOwner() {
 }
 
 function joinProject() {
-    const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId + "/" + projectId;
+    const url = "https://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId + "/" + projectId;
     const http = new XMLHttpRequest();
-    http.open("POST", url, true);
+    const key = "?apiKey1=MyAPIKey";
+    http.open("POST", url + key, true);
     http.onreadystatechange = function () { 
         if (http.readyState == 4) {
             console.log(http.responseText);
@@ -64,9 +66,10 @@ function getProject() {
 }
 
 function getProjectId(id) {
-    const url = "http://markkeeble.com/Work-in-Progress/API/v1/projects/" + id;
+    const url = "https://markkeeble.com/Work-in-Progress/API/v1/projects/" + id;
     const http = new XMLHttpRequest();
-    http.open("GET", url, true);
+    const key = "?apiKey1=MyAPIKey";
+    http.open("GET", url + key, true);
     http.onreadystatechange = function () { 
         if (http.readyState == 4) {
             if (http.status == 200) {
@@ -93,9 +96,10 @@ function setProjectPageFields(json) {
 }
 
 function leaveProject() {
-    const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId + "/projects/" + projectId + "/leave";
+    const url = "https://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId + "/projects/" + projectId + "/leave";
     const http = new XMLHttpRequest();
-    http.open("DELETE", url, true);
+    const key = "?apiKey1=MyAPIKey";
+    http.open("DELETE", url + key, true);
     http.onreadystatechange = function () { 
         if (http.readyState == 4) {
             console.log(http.responseText);
@@ -105,9 +109,10 @@ function leaveProject() {
 }
 
 function deleteProject() {
-    const url = "http://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId + "/projects/" + projectId + "/delete";
+    const url = "https://markkeeble.com/Work-in-Progress/API/v1/profile/" + loggedInId + "/projects/" + projectId + "/delete";
     const http = new XMLHttpRequest();
-    http.open("DELETE", url, true);
+    const key = "?apiKey1=MyAPIKey";
+    http.open("DELETE", url + key, true);
     http.onreadystatechange = function () { 
         if (http.readyState == 4) {
             console.log(http.responseText);
@@ -121,8 +126,8 @@ function updateProject() {
     const description = document.getElementById("project-description").value;
     const tagList = document.getElementById("project-tags-list").value;
 
-    const url = "http://markkeeble.com/Work-in-Progress/API/v1/projects/" + projectId;
-    const data = JSON.stringify({ title: title, description: description, tagList: tagList });
+    const url = "https://markkeeble.com/Work-in-Progress/API/v1/projects/" + projectId;
+    const data = JSON.stringify({ title: title, description: description, tagList: tagList, apiKey1: "MYAPIKey"});
     const http = new XMLHttpRequest();
     http.open("PUT", url, true);
     http.setRequestHeader("Content-type", "application/json");

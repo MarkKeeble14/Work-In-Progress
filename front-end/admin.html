@@ -18,7 +18,18 @@
 </head>
 
 <body>
-    <div>
+    <div id="login" >
+        <h2>Login to Admin</h2>
+        <form id="adminForm">
+            <label for="email">Email:</label><br>
+            <input type="text" id="email" name="email" required><br>
+            <label for="password">Password:</label><br>
+            <input type="text" id="password" name="password" required><br><br>
+            <input type="button" id="adminCredentials" value="Submit" onclick="proccessAdmin()">
+          </form> 
+          <p id="message"> </p>
+    </div>
+    <div id="table">
         <table id="data-table"></table>
     </div>
     <script src="./public/js/admin.js"></script>

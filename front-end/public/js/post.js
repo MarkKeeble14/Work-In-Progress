@@ -36,8 +36,8 @@ function processCreateProject() {
     const tags = document.getElementById("post-project-tags").value;
 
 
-    const url = "http://markkeeble.com/Work-in-Progress/API/v1/projects/create";
-    const data = JSON.stringify({ title: title, description: description, tagList: tags, ownerId: loggedInId });
+    const url = "https://markkeeble.com/Work-in-Progress/API/v1/projects/create";
+    const data = JSON.stringify({ title: title, description: description, tagList: tags, ownerId: loggedInId, apiKey1: "MYAPIKey" });
     const http = new XMLHttpRequest();
     http.open("POST", url, true);
     http.setRequestHeader("Content-type", "application/json");
