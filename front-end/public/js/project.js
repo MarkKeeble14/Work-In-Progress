@@ -3,12 +3,13 @@ let projectId;
 function checkUser() {
     // Retrieve the object from storage
     let retrievedObject = localStorage.getItem('user');
+    const urlParams = new URLSearchParams(window.location.search);
 
     if (retrievedObject != null && retrievedObject != undefined) {
         const json = JSON.parse(retrievedObject);
         loggedInId = json.id;
 
-        const urlParams = new URLSearchParams(window.location.search);
+
         projectId = urlParams.get('id');
 
         if (projectId != null && projectId != undefined) {
@@ -20,6 +21,20 @@ function checkUser() {
 
             checkIfOwner();
         }
+    } else {
+        
+        projectId = urlParams.get('id');
+
+        if (projectId != null && projectId != undefined) {
+            getProject();
+
+            // Enable action buttons
+            document.getElementById("common-action-buttons").classList.remove("hidden");
+            document.getElementById("common-action-buttons").classList.add("visible");
+
+            checkIfOwner();
+        }
+
     }
 }
 checkUser();
@@ -53,6 +68,7 @@ function joinProject() {
     http.onreadystatechange = function () { 
         if (http.readyState == 4) {
             console.log(http.responseText);
+            window.location.href = "https://justinxie.ca/assignment/profile.html?id=" + loggedInId;
         }
     }
     http.send();

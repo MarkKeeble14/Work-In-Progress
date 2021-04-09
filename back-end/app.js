@@ -686,7 +686,7 @@ app.get(endPointRoot + '/admin', (req,res) => {
     db.query(query + ';' + GetUpdateStatement('/admin', 'GET'), (err, result) => {
         if (err) {
             console.log(err);
-            res.send(err);
+            res.status(500).send(err);
         } else {
             res.status(200).send(result);
         }

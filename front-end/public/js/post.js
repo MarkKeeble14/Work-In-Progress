@@ -44,6 +44,7 @@ function processCreateProject() {
     http.onreadystatechange = function () { 
         if (http.readyState == 4) {
             console.log(http.responseText);
+            window.location.href = "https://justinxie.ca/assignment/profile.html?id=" + loggedInId;
         }
     }
     http.send(data);
